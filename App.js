@@ -9,7 +9,6 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>AMD Price</Text>
         <Home />
       </View>
     );
