@@ -71,9 +71,9 @@ export default class Home extends React.Component {
                 </View>
                 <Text style={labelStyle}>{this.state.company} Price</Text>
                 <Text style={[priceStyle, {color: this.state.color}]}>${this.state.stockInfo.latestPrice.toFixed(2)}</Text>
-                <View>
-                    <TouchableOpacity onPress={this.daysChange.bind(this)}>
-                        <Text style={[changeStyle, {color: this.state.color}]}>Change: {(this.state.change) ? '$' + this.state.stockInfo.change.toFixed(2) : this.state.stockInfo.changePercent.toFixed(3) + '%'}</Text>
+                <View style = {changeStyle}>
+                    <TouchableOpacity style = {changeTouchStyle} onPress={this.daysChange.bind(this)}>
+                        <Text style={[changeTextStyle, {color: this.state.color}]}>Change: {(this.state.change) ? '$' + this.state.stockInfo.change.toFixed(2) : this.state.stockInfo.changePercent.toFixed(3) + '%'}</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -101,9 +101,18 @@ const priceStyle = {
     fontSize: 30
 }
 
-const changeStyle = {
+const changeTextStyle = {
     textAlign: 'center',
     fontSize: 20
+}
+
+const changeStyle = {
+    alignItems: 'center'
+}
+
+const changeTouchStyle = {
+    width: '40%',
+    alignItems: 'center'
 }
 
 const errorStyle = {
