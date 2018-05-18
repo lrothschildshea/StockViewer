@@ -7,19 +7,16 @@ export default class Home extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            company: 'AMD',
+            company: '',
             price: 0,
             modifiedCompany: '',
-            realStock: true
+            realStock: true,
+            stockInfo: {
+                latestPrice: 0,
+                change: 0
+            },
+            color: 'green'
         }
-    }
-    
-    componentDidMount(){
-        fetch('https://api.iextrading.com/1.0/stock/' + this.state.company + '/quote').then(res => {
-            return res.json()
-        }).then(json =>{
-            this.setState({price: json.latestPrice})
-        })
     }
 
     textEdit(){
@@ -30,14 +27,18 @@ export default class Home extends React.Component {
                 return res.json()
             } else {
                 this.setState({realStock: false})
-                return {latestPrice: this.state.price}
+                return this.state.stockInfo
             }
         }).then(json =>{
-            this.setState({price: json.latestPrice})
+            if(json.change < 0){
+                this.setState({stockInfo: json,
+                                color: 'red'});
+            } else {
+                this.setState({stockInfo: json,
+                    color: 'green'});
+            }
         });
     }
-
-
 
     render(){
           return(
@@ -46,9 +47,10 @@ export default class Home extends React.Component {
                     <TextInput style={textInputStyle} onChangeText={(text) => this.setState({modifiedCompany: text})} onEndEditing={this.textEdit.bind(this)} underlineColorAndroid='transparent'/>
                 </View>
                 <Text style={labelStyle}>{this.state.company} Price</Text>
-                <Text style={priceStyle}>${this.state.price}</Text>
+                <Text style={[priceStyle, {color: this.state.color}]}>${this.state.stockInfo.latestPrice}</Text>
+                <Text style={[changeStyle, {color: this.state.color}]}>Change: {this.state.stockInfo.change}</Text>
                 {
-                    (!this.state.realStock) ? <Text style={errorStyle}>'{this.state.company}' is not a real Stock. Please check your spelling.</Text> : null
+                    (!this.state.realStock) ? <Text style={errorStyle}>"{this.state.company}" is not a real Stock. Please check your spelling.</Text> : null
                 }
             </View>
           );
@@ -65,6 +67,10 @@ const priceStyle = {
     fontSize: 30
 }
 
+const changeStyle = {
+    textAlign: 'center'
+}
+
 const errorStyle = {
     textAlign: 'center'
 }
@@ -79,5 +85,6 @@ const textInputStyle = {
 }
 
 const textInput = {
-    alignItems: 'center'
+    alignItems: 'center',
+    margin: 20
 }
