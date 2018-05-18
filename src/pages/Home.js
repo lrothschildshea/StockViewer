@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, TextInput, ScrollView} from 'react-native';
+import {Text, View, TextInput, ScrollView, TouchableOpacity} from 'react-native';
 
 
 export default class Home extends React.Component {
@@ -8,7 +8,6 @@ export default class Home extends React.Component {
         super(props)
         this.state = {
             company: 'Stock',
-            price: 0,
             modifiedCompany: '',
             realStock: true,
             stockInfo: {
@@ -40,9 +39,27 @@ export default class Home extends React.Component {
         });
     }
 
+    refresh(){
+        fetch('https://api.iextrading.com/1.0/stock/' + this.state.company + '/quote').then(res => {
+            if(res.status < 400){
+                return res.json()
+            } else {
+                return this.state.stockInfo
+            }
+        }).then(json =>{
+            if(json.change < 0){
+                this.setState({stockInfo: json,
+                                color: 'red'});
+            } else {
+                this.setState({stockInfo: json,
+                    color: 'green'});
+            }
+        });
+    }
+
     render(){
           return(
-            <ScrollView>
+            <ScrollView >
                 <View style={textInput}>
                     <TextInput style={textInputStyle} placeholder='Enter a stock abbreviation' onChangeText={(text) => this.setState({modifiedCompany: text})} onEndEditing={this.textEdit.bind(this)} underlineColorAndroid='transparent'/>
                 </View>
@@ -52,6 +69,11 @@ export default class Home extends React.Component {
                 {
                     (!this.state.realStock) ? <Text style={errorStyle}>"{this.state.company}" is not a real Stock. Please check your spelling.</Text> : null
                 }
+                <View style={buttonStyle}>
+                    <TouchableOpacity style={refreshStyle}onPress={this.refresh.bind(this)}>
+                        <Text style={refTextStyle}>Refresh</Text>
+                    </TouchableOpacity>
+                </View>
             </ScrollView>
           );
       }
@@ -91,4 +113,20 @@ const textInputStyle = {
 const textInput = {
     alignItems: 'center',
     margin: 20
+}
+
+const buttonStyle = {
+    alignItems: 'center',
+    margin: '5%'
+}
+
+const refreshStyle = {
+    backgroundColor: 'green',
+    alignItems: 'center',
+    width: '40%',
+    borderRadius: 10
+}
+
+const refTextStyle = {
+    fontSize: 30
 }

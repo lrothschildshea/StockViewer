@@ -16,5 +16,7 @@ const titleStyle = {
     backgroundColor: 'rgb(255, 128, 0)',
     width: '100%',
     height: '10%',
-    textAlign: 'center'
+    textAlign: 'center',
+    borderBottomWidth: 2,
+    borderColor: 'rgb(30, 30, 30)'
 }
