@@ -12,9 +12,11 @@ export default class Home extends React.Component {
             realStock: true,
             stockInfo: {
                 latestPrice: 0,
-                change: 0
+                change: 0,
+                changePercent: 0
             },
-            color: 'green'
+            color: 'green',
+            change: true,       //true mean show dollar amount false means show %
         }
     }
 
@@ -37,6 +39,10 @@ export default class Home extends React.Component {
                     color: 'green'});
             }
         });
+    }
+
+    daysChange(){
+        this.setState({change: !this.state.change})
     }
 
     refresh(){
@@ -65,12 +71,17 @@ export default class Home extends React.Component {
                 </View>
                 <Text style={labelStyle}>{this.state.company} Price</Text>
                 <Text style={[priceStyle, {color: this.state.color}]}>${this.state.stockInfo.latestPrice.toFixed(2)}</Text>
-                <Text style={[changeStyle, {color: this.state.color}]}>Change: {this.state.stockInfo.change.toFixed(2)}</Text>
+                <View>
+                    <TouchableOpacity onPress={this.daysChange.bind(this)}>
+                        <Text style={[changeStyle, {color: this.state.color}]}>Change: {(this.state.change) ? '$' + this.state.stockInfo.change.toFixed(2) : this.state.stockInfo.changePercent.toFixed(3) + '%'}</Text>
+                    </TouchableOpacity>
+                </View>
+
                 {
                     (!this.state.realStock) ? <Text style={errorStyle}>"{this.state.company}" is not a real Stock. Please check your spelling.</Text> : null
                 }
                 <View style={buttonStyle}>
-                    <TouchableOpacity style={refreshStyle}onPress={this.refresh.bind(this)}>
+                    <TouchableOpacity style={refreshStyle} onPress={this.refresh.bind(this)}>
                         <Text style={refTextStyle}>Refresh</Text>
                     </TouchableOpacity>
                 </View>
@@ -121,7 +132,7 @@ const buttonStyle = {
 }
 
 const refreshStyle = {
-    backgroundColor: 'green',
+    backgroundColor: 'rgb(255, 128, 0)',
     alignItems: 'center',
     width: '40%',
     borderRadius: 10
