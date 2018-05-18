@@ -12,8 +12,8 @@ export default class TitleBar extends React.Component {
 
 const titleStyle = {
     fontSize: 40,
-    color: 'white',
-    backgroundColor: 'steelblue',
+    color: 'rgb(30, 30, 30)',
+    backgroundColor: 'rgb(255, 128, 0)',
     width: '100%',
     height: '10%',
     textAlign: 'center'

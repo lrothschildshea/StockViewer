@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, TextInput} from 'react-native';
+import {Text, View, TextInput, ScrollView} from 'react-native';
 
 
 export default class Home extends React.Component {
@@ -7,7 +7,7 @@ export default class Home extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            company: '',
+            company: 'Stock',
             price: 0,
             modifiedCompany: '',
             realStock: true,
@@ -42,24 +42,25 @@ export default class Home extends React.Component {
 
     render(){
           return(
-            <View>
+            <ScrollView>
                 <View style={textInput}>
-                    <TextInput style={textInputStyle} onChangeText={(text) => this.setState({modifiedCompany: text})} onEndEditing={this.textEdit.bind(this)} underlineColorAndroid='transparent'/>
+                    <TextInput style={textInputStyle} placeholder='Enter a stock abbreviation' onChangeText={(text) => this.setState({modifiedCompany: text})} onEndEditing={this.textEdit.bind(this)} underlineColorAndroid='transparent'/>
                 </View>
                 <Text style={labelStyle}>{this.state.company} Price</Text>
-                <Text style={[priceStyle, {color: this.state.color}]}>${this.state.stockInfo.latestPrice}</Text>
-                <Text style={[changeStyle, {color: this.state.color}]}>Change: {this.state.stockInfo.change}</Text>
+                <Text style={[priceStyle, {color: this.state.color}]}>${this.state.stockInfo.latestPrice.toFixed(2)}</Text>
+                <Text style={[changeStyle, {color: this.state.color}]}>Change: {this.state.stockInfo.change.toFixed(2)}</Text>
                 {
                     (!this.state.realStock) ? <Text style={errorStyle}>"{this.state.company}" is not a real Stock. Please check your spelling.</Text> : null
                 }
-            </View>
+            </ScrollView>
           );
       }
 }
 
 const labelStyle = {
     textAlign: 'center',
-    fontSize: 40
+    fontSize: 40,
+    color: 'rgb(255, 128, 0)'
 }
 
 const priceStyle = {
@@ -68,20 +69,23 @@ const priceStyle = {
 }
 
 const changeStyle = {
-    textAlign: 'center'
+    textAlign: 'center',
+    fontSize: 20
 }
 
 const errorStyle = {
-    textAlign: 'center'
+    textAlign: 'center',
+    color: 'red'
 }
 
 const textInputStyle = {
     height: 40,
     width: '90%',
-    borderColor: 'black',
+    borderColor: 'rgb(255, 128, 0)',
     borderWidth: 1,
     textAlign: 'center',
-    borderRadius: 50
+    borderRadius: 50,
+    color: 'rgb(255, 128, 0)'
 }
 
 const textInput = {
